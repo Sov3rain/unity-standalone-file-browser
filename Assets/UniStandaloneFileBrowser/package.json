@@ -1,13 +1,16 @@
 {
 	"name": "com.gkngkc.usfb",
 	"version": "1.1.3",
-	"displayName": "UniStandaloneFileBrowser",
+	"displayName": "Unity Standalone File Browser",
 	"description": "A native file browser for unity standalone platforms.",
-	"unity": "2018.4",
+	"unity": "2021.3",
 	"author": {
 		"name": "Gökhan Gökçe",
 		"email": "gkngkc@gmail.com"
 	},
+	"contributors": [{
+		"name": "Sov3rain"
+	}],
 	"dependencies": {},
 	"scopedRegistries": []
 }

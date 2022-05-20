@@ -1,0 +1,5 @@
+{
+  "scripts": {
+    "publish": "git subtree push --prefix=Assets/UniStandaloneFileBrowser origin upm"
+  }
+}
