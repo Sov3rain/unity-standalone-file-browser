@@ -10,9 +10,13 @@ A simple wrapper for native file dialogs on Windows/Mac/Linux.
 - Linux support by [Ricardo Rodrigues](https://github.com/RicardoEPRodrigues).
 - Basic WebGL support.
 
-[Download Package](https://github.com/gkngkc/UnityStandaloneFileBrowser/releases/download/1.2/StandaloneFileBrowser.unitypackage)
+## Installation
 
-Example usage:
+Open the Package Manager window, then click on the "+" icon on the top left corner, then select the "Add Package from git URL..." and paste this URL:
+
+`https://github.com/Sov3rain/unity-standalone-file-browser.git#upm`
+
+## Example Usage
 
 ```csharp
 // Open file
@@ -69,5 +73,5 @@ WebGL:
  - File filter support.
  - Not well tested, probably not much reliable.
  - Since browsers require more work to do file operations, webgl isn't directly implemented to Open/Save calls. You can check CanvasSampleScene.unity and canvas sample scripts for example usages.
- 
+
  Live Demo: https://gkngkc.github.io/
