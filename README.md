@@ -19,6 +19,8 @@ Open the Package Manager window, then click on the "+" icon on the top left corn
 ## Example Usage
 
 ```csharp
+using USBF;
+
 // Open file
 var paths = StandaloneFileBrowser.OpenFilePanel("Open File", "", "", false);
 
