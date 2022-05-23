@@ -16,6 +16,10 @@ Open the Package Manager window, then click on the "+" icon on the top left corn
 
 `https://github.com/Sov3rain/unity-standalone-file-browser.git#upm`
 
+Install a specific version:
+
+`https://github.com/Sov3rain/unity-standalone-file-browser.git#v1.2.0`
+
 ## Example Usage
 
 ```csharp
