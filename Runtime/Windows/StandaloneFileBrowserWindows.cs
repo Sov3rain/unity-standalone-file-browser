@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Linq;
 using System.Collections.Generic;
 
-namespace SFB
+namespace USFB
 {
     // For fullscreen support
     // - "PlayerSettings/Visible In Background" should be enabled, otherwise when file dialog opened app window minimizes automatically.
