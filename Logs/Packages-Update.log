@@ -27,3 +27,15 @@ The following packages were added:
   com.unity.xr.legacyinputhelpers@2.1.9
 The following packages were removed:
   com.unity.package-manager-ui@2.0.8
+
+=== Wed Sep 17 10:24:38 2025
+
+Packages were changed.
+Update Mode: updateDependencies
+
+The following packages were updated:
+  com.unity.ide.rider from version 3.0.13 to 3.0.31
+  com.unity.ide.visualstudio from version 2.0.14 to 2.0.22
+  com.unity.test-framework from version 1.1.31 to 1.1.33
+  com.unity.timeline from version 1.6.4 to 1.6.5
+  com.unity.xr.legacyinputhelpers from version 2.1.9 to 2.1.11
