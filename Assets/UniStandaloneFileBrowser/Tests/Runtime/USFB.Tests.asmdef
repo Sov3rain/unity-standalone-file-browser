@@ -1,0 +1,22 @@
+{
+    "name": "USFB.Tests",
+    "rootNamespace": "USFB.Tests",
+    "references": [
+        "UnityEngine.TestRunner",
+        "USFB.Runtime",
+        "USFB.Runtime.Common"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
