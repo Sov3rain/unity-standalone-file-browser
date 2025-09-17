@@ -8,8 +8,7 @@ public class FileInputField : Button
     {
         onClick.AddListener(() =>
         {
-            StandaloneFileBrowser.OpenFilePanelAsync("Title", "", "", false,
-                (string[] paths) => { Debug.Log(paths[0]); });
+            StandaloneFileBrowser.OpenFilePanelAsync("Title", "", "", false, paths => { Debug.Log(paths[0]); });
         });
     }
 }
