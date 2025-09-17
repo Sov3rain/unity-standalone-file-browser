@@ -26,7 +26,15 @@ public class BasicSample : MonoBehaviour
         GUILayout.Space(5);
         if (GUILayout.Button("Open File Async"))
         {
-            // StandaloneFileBrowser.OpenFilePanelAsync("Open File", "", "", false, paths => { WriteResult(paths); });
+            // Example with callback - processes the result when dialog completes
+            StandaloneFileBrowser.OpenFilePanelAsync("Open File", "", "", false, paths => { WriteResult(paths); });
+        }
+
+        GUILayout.Space(5);
+        if (GUILayout.Button("Open File Async (No Callback)"))
+        {
+            // Example without callback - fire-and-forget, callback parameter is optional
+            StandaloneFileBrowser.OpenFilePanelAsync("Open File", "", "", false, null);
         }
 
         GUILayout.Space(5);
@@ -72,7 +80,15 @@ public class BasicSample : MonoBehaviour
         GUILayout.Space(5);
         if (GUILayout.Button("Open Folder Async"))
         {
+            // Example with callback - processes the result when dialog completes
             StandaloneFileBrowser.OpenFolderPanelAsync("Select Folder", "", true, paths => { WriteResult(paths); });
+        }
+
+        GUILayout.Space(5);
+        if (GUILayout.Button("Open Folder Async (No Callback)"))
+        {
+            // Example without callback - fire-and-forget, callback parameter is optional
+            StandaloneFileBrowser.OpenFolderPanelAsync("Select Folder", "", true, null);
         }
 
         GUILayout.Space(5);
@@ -94,7 +110,15 @@ public class BasicSample : MonoBehaviour
         GUILayout.Space(5);
         if (GUILayout.Button("Save File Async"))
         {
+            // Example with callback - processes the result when dialog completes
             StandaloneFileBrowser.SaveFilePanelAsync("Save File", "", "", "", path => { WriteResult(path); });
+        }
+
+        GUILayout.Space(5);
+        if (GUILayout.Button("Save File Async (No Callback)"))
+        {
+            // Example without callback - fire-and-forget, callback parameter is optional
+            StandaloneFileBrowser.SaveFilePanelAsync("Save File", "", "", "", null);
         }
 
         GUILayout.Space(5);

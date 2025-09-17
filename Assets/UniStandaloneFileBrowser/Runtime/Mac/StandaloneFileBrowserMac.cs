@@ -17,19 +17,19 @@ namespace USFB
         [AOT.MonoPInvokeCallback(typeof(AsyncCallback))]
         private static void openFileCb(string result)
         {
-            _openFileCb.Invoke(result.Split((char)28));
+            _openFileCb?.Invoke(result.Split((char)28));
         }
 
         [AOT.MonoPInvokeCallback(typeof(AsyncCallback))]
         private static void openFolderCb(string result)
         {
-            _openFolderCb.Invoke(result.Split((char)28));
+            _openFolderCb?.Invoke(result.Split((char)28));
         }
 
         [AOT.MonoPInvokeCallback(typeof(AsyncCallback))]
         private static void saveFileCb(string result)
         {
-            _saveFileCb.Invoke(result);
+            _saveFileCb?.Invoke(result);
         }
 
         [DllImport("StandaloneFileBrowser")]
@@ -58,12 +58,15 @@ namespace USFB
         public void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect, Action<string[]> cb)
         {
             _openFileCb = cb;
-            DialogOpenFilePanelAsync(
-                title,
-                directory,
-                GetFilterFromFileExtensionList(extensions),
-                multiselect,
-                openFileCb);
+            if (cb != null)
+            {
+                DialogOpenFilePanelAsync(
+                    title,
+                    directory,
+                    GetFilterFromFileExtensionList(extensions),
+                    multiselect,
+                    openFileCb);
+            }
         }
 
         public string[] OpenFolderPanel(string title, string directory, bool multiselect)
@@ -78,11 +81,14 @@ namespace USFB
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
         {
             _openFolderCb = cb;
-            DialogOpenFolderPanelAsync(
-                title,
-                directory,
-                multiselect,
-                openFolderCb);
+            if (cb != null)
+            {
+                DialogOpenFolderPanelAsync(
+                    title,
+                    directory,
+                    multiselect,
+                    openFolderCb);
+            }
         }
 
         public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
@@ -97,12 +103,15 @@ namespace USFB
         public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<string> cb)
         {
             _saveFileCb = cb;
-            DialogSaveFilePanelAsync(
-                title,
-                directory,
-                defaultName,
-                GetFilterFromFileExtensionList(extensions),
-                saveFileCb);
+            if (cb != null)
+            {
+                DialogSaveFilePanelAsync(
+                    title,
+                    directory,
+                    defaultName,
+                    GetFilterFromFileExtensionList(extensions),
+                    saveFileCb);
+            }
         }
 
         private static string GetFilterFromFileExtensionList(ExtensionFilter[] extensions)

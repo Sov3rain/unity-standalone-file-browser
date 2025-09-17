@@ -49,12 +49,15 @@ namespace USFB
         public void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect, Action<string[]> cb)
         {
             _openFileCb = cb;
-            DialogOpenFilePanelAsync(
-                title,
-                directory,
-                GetFilterFromFileExtensionList(extensions),
-                multiselect,
-                (string result) => { _openFileCb.Invoke(result.Split((char)28)); });
+            if (cb != null)
+            {
+                DialogOpenFilePanelAsync(
+                    title,
+                    directory,
+                    GetFilterFromFileExtensionList(extensions),
+                    multiselect,
+                    (string result) => { _openFileCb?.Invoke(result.Split((char)28)); });
+            }
         }
 
         public string[] OpenFolderPanel(string title, string directory, bool multiselect)
@@ -69,11 +72,14 @@ namespace USFB
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
         {
             _openFolderCb = cb;
-            DialogOpenFolderPanelAsync(
-                title,
-                directory,
-                multiselect,
-                (string result) => { _openFolderCb.Invoke(result.Split((char)28)); });
+            if (cb != null)
+            {
+                DialogOpenFolderPanelAsync(
+                    title,
+                    directory,
+                    multiselect,
+                    (string result) => { _openFolderCb?.Invoke(result.Split((char)28)); });
+            }
         }
 
         public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
@@ -88,12 +94,15 @@ namespace USFB
         public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<string> cb)
         {
             _saveFileCb = cb;
-            DialogSaveFilePanelAsync(
-                title,
-                directory,
-                defaultName,
-                GetFilterFromFileExtensionList(extensions),
-                (string result) => { _saveFileCb.Invoke(result); });
+            if (cb != null)
+            {
+                DialogSaveFilePanelAsync(
+                    title,
+                    directory,
+                    defaultName,
+                    GetFilterFromFileExtensionList(extensions),
+                    (string result) => { _saveFileCb?.Invoke(result); });
+            }
         }
 
         private static string GetFilterFromFileExtensionList(ExtensionFilter[] extensions)
