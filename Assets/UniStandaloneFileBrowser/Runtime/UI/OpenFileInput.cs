@@ -8,7 +8,9 @@ namespace USFB
     public class OpenFileInput : MonoBehaviour
     {
         [Header("File Input Settings")]
-        [SerializeField] private bool _multiselect;
+        [SerializeField, Tooltip("Multiselect is not supported in Editor mode.")]
+        private bool _multiselect;
+
         [SerializeField] private string _accept;
 
         [Header("UI Elements")]
