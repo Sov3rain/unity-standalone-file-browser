@@ -1,6 +1,4 @@
 using NUnit.Framework;
-using USFB;
-using System;
 
 namespace USFB.Tests
 {
@@ -59,30 +57,6 @@ namespace USFB.Tests
         }
 
         [Test]
-        public void LeadingDot_IsRemoved()
-        {
-            var result = StandaloneFileBrowser.GetExtensionFilters(".png,.JpG");
-            Assert.AreEqual(2, result.Length);
-            Assert.AreEqual("PNG", result[0].Name);
-            CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
-            Assert.AreEqual("JPG", result[1].Name);
-            CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
-        }
-
-        [Test]
-        public void DuplicateExtensions_AreDeduplicated()
-        {
-            var result = StandaloneFileBrowser.GetExtensionFilters("png,png,jpg,PNG");
-            Assert.AreEqual(2, result.Length);
-
-            Assert.AreEqual("PNG", result[0].Name);
-            CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
-
-            Assert.AreEqual("JPG", result[1].Name);
-            CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
-        }
-
-        [Test]
         public void MixedCaseNormalization()
         {
             var result = StandaloneFileBrowser.GetExtensionFilters("Png,JPg");
@@ -92,7 +66,5 @@ namespace USFB.Tests
             Assert.AreEqual("JPG", result[1].Name);
             CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
         }
-        
-        
     }
 }

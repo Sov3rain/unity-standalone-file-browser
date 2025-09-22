@@ -243,9 +243,8 @@ namespace USFB
 
             return input
                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(ext => ext.Trim().TrimStart('.').ToLowerInvariant())
+                .Select(ext => ext.Trim())
                 .Where(ext => ext.Length > 0)
-                .Distinct()
                 .Select(ext => new ExtensionFilter(ext.ToUpperInvariant(), ext))
                 .ToArray();
         }

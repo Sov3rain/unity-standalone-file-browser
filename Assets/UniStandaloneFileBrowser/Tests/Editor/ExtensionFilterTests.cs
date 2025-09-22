@@ -13,7 +13,7 @@ namespace USFB.Tests
         #region Constructor Tests
 
         /// <summary>
-        /// Tests ExtensionFilter constructor with single extension.
+        /// Tests ExtensionFilter constructor with a single extension.
         /// </summary>
         [Test]
         public void Constructor_WithSingleExtension_CreatesValidFilter()
@@ -49,7 +49,7 @@ namespace USFB.Tests
             Assert.AreEqual(name, filter.Name, "Filter name should match constructor parameter");
             Assert.IsNotNull(filter.Extensions, "Extensions array should not be null");
             Assert.AreEqual(extensions.Length, filter.Extensions.Length, "Extensions array length should match input");
-            
+
             for (int i = 0; i < extensions.Length; i++)
             {
                 Assert.AreEqual(extensions[i], filter.Extensions[i], $"Extension at index {i} should match input");
@@ -95,7 +95,7 @@ namespace USFB.Tests
         }
 
         /// <summary>
-        /// Tests ExtensionFilter constructor with empty extensions array.
+        /// Tests ExtensionFilter constructor with an empty extensions array.
         /// </summary>
         [Test]
         public void Constructor_WithEmptyExtensionsArray_CreatesFilterWithEmptyExtensions()
@@ -112,7 +112,21 @@ namespace USFB.Tests
             Assert.IsNotNull(filter.Extensions, "Extensions array should not be null");
             Assert.AreEqual(0, filter.Extensions.Length, "Extensions array should be empty when input is empty");
         }
-        
+
+        [Test]
+        public void DuplicateExtensions_AreDeduplicated()
+        {
+            // Arrange
+            const string name = "Duplicate Extensions";
+            var extensions = new[] { "txt", "txt", "doc", "doc" };
+
+            // Act
+            var filter = new ExtensionFilter(name, extensions);
+
+            // Assert
+            Assert.AreEqual(2, filter.Extensions.Length, "Duplicate extensions should be deduplicated");
+        }
+
         [TestCase("p ng", ExpectedResult = 0)]
         [TestCase("*gif", ExpectedResult = 0)]
         [TestCase(".jp#g", ExpectedResult = 0)]
@@ -162,7 +176,7 @@ namespace USFB.Tests
             // Assert
             Assert.IsNotNull(actualExtensions, "Extensions property should not be null");
             Assert.AreEqual(expectedExtensions.Length, actualExtensions.Length, "Extensions array length should match");
-            
+
             for (int i = 0; i < expectedExtensions.Length; i++)
             {
                 Assert.AreEqual(expectedExtensions[i], actualExtensions[i], $"Extension at index {i} should match");
