@@ -243,11 +243,9 @@ namespace USFB
 
             return input
                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
-                .Select(ext => ext.Trim())
+                .Select(ext => ext.Trim().TrimStart('.').ToLowerInvariant())
                 .Where(ext => ext.Length > 0)
-                .Select(ext => ext.TrimStart('.')) // remove leading dots
-                .Select(ext => ext.ToLowerInvariant())
-                .Distinct() // remove duplicates
+                .Distinct()
                 .Select(ext => new ExtensionFilter(ext.ToUpperInvariant(), ext))
                 .ToArray();
         }

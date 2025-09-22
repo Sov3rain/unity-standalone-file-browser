@@ -1,6 +1,5 @@
 using System;
 using NUnit.Framework;
-using USFB;
 
 namespace USFB.Tests
 {
@@ -85,10 +84,9 @@ namespace USFB.Tests
         {
             // Arrange
             const string name = "All Files";
-            string[] extensions = null;
 
             // Act
-            var filter = new ExtensionFilter(name, extensions);
+            var filter = new ExtensionFilter(name, null);
 
             // Assert
             Assert.AreEqual(name, filter.Name, "Filter name should match constructor parameter");
@@ -104,7 +102,7 @@ namespace USFB.Tests
         {
             // Arrange
             const string name = "All Files";
-            var extensions = new string[0];
+            var extensions = Array.Empty<string>();
 
             // Act
             var filter = new ExtensionFilter(name, extensions);
@@ -113,6 +111,19 @@ namespace USFB.Tests
             Assert.AreEqual(name, filter.Name, "Filter name should match constructor parameter");
             Assert.IsNotNull(filter.Extensions, "Extensions array should not be null");
             Assert.AreEqual(0, filter.Extensions.Length, "Extensions array should be empty when input is empty");
+        }
+        
+        [TestCase("p ng")]
+        [TestCase("*gif")]
+        [TestCase(".jp#g")]
+        [TestCase("")]
+        [TestCase("  ")]
+        [TestCase("png", "jp g")]
+        public void InvalidExtension_ThrowsException(params string[] invalidExtensions)
+        {
+            Assert.Throws<ArgumentException>(() =>
+                _ = new ExtensionFilter("Invalid", invalidExtensions)
+            );
         }
 
         #endregion

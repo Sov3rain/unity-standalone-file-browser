@@ -1,103 +1,98 @@
 using NUnit.Framework;
 using USFB;
+using System;
 
-public class GetExtensionsFiltersTests
+namespace USFB.Tests
 {
-    [Test]
-    public void NullInput_ReturnsEmptyArray()
+    public class GetExtensionsFiltersTests
     {
-        var result = StandaloneFileBrowser.GetExtensionFilters(null);
-        Assert.IsNotNull(result);
-        Assert.IsEmpty(result);
-    }
+        [Test]
+        public void NullInput_ReturnsEmptyArray()
+        {
+            var result = StandaloneFileBrowser.GetExtensionFilters(null);
+            Assert.IsNotNull(result);
+            Assert.IsEmpty(result);
+        }
 
-    [Test]
-    public void EmptyString_ReturnsEmptyArray()
-    {
-        var result = StandaloneFileBrowser.GetExtensionFilters("");
-        Assert.IsNotNull(result);
-        Assert.IsEmpty(result);
-    }
+        [Test]
+        public void EmptyString_ReturnsEmptyArray()
+        {
+            var result = StandaloneFileBrowser.GetExtensionFilters("");
+            Assert.IsNotNull(result);
+            Assert.IsEmpty(result);
+        }
 
-    [Test]
-    public void SingleExtension_ParsesCorrectly()
-    {
-        var result = StandaloneFileBrowser.GetExtensionFilters("png");
-        Assert.AreEqual(1, result.Length);
-        Assert.AreEqual("PNG", result[0].Name);
-        CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
-    }
+        [Test]
+        public void SingleExtension_ParsesCorrectly()
+        {
+            var result = StandaloneFileBrowser.GetExtensionFilters("png");
+            Assert.AreEqual(1, result.Length);
+            Assert.AreEqual("PNG", result[0].Name);
+            CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
+        }
 
-    [Test]
-    public void MultipleExtensions_ParsesCorrectly()
-    {
-        var result = StandaloneFileBrowser.GetExtensionFilters("png,jpg,gif");
-        Assert.AreEqual(3, result.Length);
+        [Test]
+        public void MultipleExtensions_ParsesCorrectly()
+        {
+            var result = StandaloneFileBrowser.GetExtensionFilters("png,jpg,gif");
+            Assert.AreEqual(3, result.Length);
 
-        Assert.AreEqual("PNG", result[0].Name);
-        CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
+            Assert.AreEqual("PNG", result[0].Name);
+            CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
 
-        Assert.AreEqual("JPG", result[1].Name);
-        CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
+            Assert.AreEqual("JPG", result[1].Name);
+            CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
 
-        Assert.AreEqual("GIF", result[2].Name);
-        CollectionAssert.AreEqual(new[] { "gif" }, result[2].Extensions);
-    }
+            Assert.AreEqual("GIF", result[2].Name);
+            CollectionAssert.AreEqual(new[] { "gif" }, result[2].Extensions);
+        }
 
-    [Test]
-    public void ExtraWhitespace_IsTrimmed()
-    {
-        var result = StandaloneFileBrowser.GetExtensionFilters("  png  ,   jpg   ");
-        Assert.AreEqual(2, result.Length);
-        Assert.AreEqual("PNG", result[0].Name);
-        CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
-        Assert.AreEqual("JPG", result[1].Name);
-        CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
-    }
+        [Test]
+        public void ExtraWhitespace_IsTrimmed()
+        {
+            var result = StandaloneFileBrowser.GetExtensionFilters("  png  ,   jpg   ");
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual("PNG", result[0].Name);
+            CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
+            Assert.AreEqual("JPG", result[1].Name);
+            CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
+        }
 
-    [Test]
-    public void EmptyEntries_AreIgnored()
-    {
-        var result = StandaloneFileBrowser.GetExtensionFilters("png,, ,jpg");
-        Assert.AreEqual(2, result.Length);
-        Assert.AreEqual("PNG", result[0].Name);
-        CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
-        Assert.AreEqual("JPG", result[1].Name);
-        CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
-    }
+        [Test]
+        public void LeadingDot_IsRemoved()
+        {
+            var result = StandaloneFileBrowser.GetExtensionFilters(".png,.JpG");
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual("PNG", result[0].Name);
+            CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
+            Assert.AreEqual("JPG", result[1].Name);
+            CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
+        }
 
-    [Test]
-    public void CaseIsNormalized_ToUpperAndLower()
-    {
-        var result = StandaloneFileBrowser.GetExtensionFilters("Png,JPg");
-        Assert.AreEqual(2, result.Length);
-        Assert.AreEqual("PNG", result[0].Name);
-        CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
-        Assert.AreEqual("JPG", result[1].Name);
-        CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
-    }
+        [Test]
+        public void DuplicateExtensions_AreDeduplicated()
+        {
+            var result = StandaloneFileBrowser.GetExtensionFilters("png,png,jpg,PNG");
+            Assert.AreEqual(2, result.Length);
 
-    [Test]
-    public void LeadingDot_IsRemoved()
-    {
-        var result = StandaloneFileBrowser.GetExtensionFilters(".png,.JpG");
-        Assert.AreEqual(2, result.Length);
-        Assert.AreEqual("PNG", result[0].Name);
-        CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
-        Assert.AreEqual("JPG", result[1].Name);
-        CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
-    }
+            Assert.AreEqual("PNG", result[0].Name);
+            CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
 
-    [Test]
-    public void DuplicateExtensions_AreDeduplicated()
-    {
-        var result = StandaloneFileBrowser.GetExtensionFilters("png,png,jpg,PNG");
-        Assert.AreEqual(2, result.Length);
+            Assert.AreEqual("JPG", result[1].Name);
+            CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
+        }
 
-        Assert.AreEqual("PNG", result[0].Name);
-        CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
-
-        Assert.AreEqual("JPG", result[1].Name);
-        CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
+        [Test]
+        public void MixedCaseNormalization()
+        {
+            var result = StandaloneFileBrowser.GetExtensionFilters("Png,JPg");
+            Assert.AreEqual(2, result.Length);
+            Assert.AreEqual("PNG", result[0].Name);
+            CollectionAssert.AreEqual(new[] { "png" }, result[0].Extensions);
+            Assert.AreEqual("JPG", result[1].Name);
+            CollectionAssert.AreEqual(new[] { "jpg" }, result[1].Extensions);
+        }
+        
+        
     }
 }
