@@ -1,18 +1,20 @@
 {
     "name": "USFB.Runtime",
+    "rootNamespace": "",
     "references": [
         "USFB.Runtime.Common",
-        "USFB.Runtime.Editor",
         "USFB.Runtime.Linux",
         "USFB.Runtime.Mac",
-        "USFB.Runtime.Windows"
+        "USFB.Runtime.Windows",
+        "Unity.TextMeshPro"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 
 namespace USFB
 {
@@ -31,13 +32,12 @@ namespace USFB
         /// </summary>
         /// <param name="title">Dialog title</param>
         /// <param name="directory">Root directory</param>
-        /// <param name="extension">Allowed extension; null or empty allows all files</param>
+        /// <param name="extensions">Allowed extension, comma separated; null or empty allows all files</param>
         /// <param name="multiselect">Allow multiple file selection</param>
         /// <returns>An array of selected files; empty when canceled</returns>
-        public static FileInfo[] OpenFilePanel(string title, string directory, string extension, bool multiselect)
+        public static FileInfo[] OpenFilePanel(string title, string directory, string extensions, bool multiselect)
         {
-            var extensions = string.IsNullOrEmpty(extension) ? null : new[] { new ExtensionFilter("", extension) };
-            return OpenFilePanel(title, directory, extensions, multiselect);
+            return OpenFilePanel(title, directory, GetExtensionFilters(extensions), multiselect);
         }
 
         /// <summary>
@@ -54,7 +54,8 @@ namespace USFB
             ExtensionFilter[] extensions,
             bool multiselect)
         {
-            var paths = _platformWrapper.OpenFilePanel(title, directory, extensions, multiselect) ?? Array.Empty<string>();
+            var paths = _platformWrapper.OpenFilePanel(title, directory, extensions, multiselect) ??
+                        Array.Empty<string>();
             var fileInfos = new FileInfo[paths.Length];
 
             for (int i = 0; i < paths.Length; i++)
@@ -70,18 +71,17 @@ namespace USFB
         /// </summary>
         /// <param name="title">Dialog title</param>
         /// <param name="directory">Root directory</param>
-        /// <param name="extension">Allowed extension; null or empty allows all files</param>
+        /// <param name="extensions">Allowed extension, comma separated; null or empty allows all files</param>
         /// <param name="multiselect">Allow multiple file selection</param>
         /// <param name="callback">Optional callback invoked with the selected files (empty array on cancel); can be null</param>
         public static void OpenFilePanelAsync(
             string title,
             string directory,
-            string extension,
+            string extensions,
             bool multiselect,
             Action<FileInfo[]> callback)
         {
-            var extensions = string.IsNullOrEmpty(extension) ? null : new[] { new ExtensionFilter("", extension) };
-            OpenFilePanelAsync(title, directory, extensions, multiselect, callback);
+            OpenFilePanelAsync(title, directory, GetExtensionFilters(extensions), multiselect, callback);
         }
 
         /// <summary>
@@ -170,12 +170,11 @@ namespace USFB
         /// <param name="title">Dialog title</param>
         /// <param name="directory">Root directory</param>
         /// <param name="defaultName">Default file name</param>
-        /// <param name="extension">File extension; null or empty allows all files</param>
+        /// <param name="extensions">File extensions, comma separated; null or empty allows all files</param>
         /// <returns>The chosen FileInfo; null when canceled</returns>
-        public static FileInfo SaveFilePanel(string title, string directory, string defaultName, string extension)
+        public static FileInfo SaveFilePanel(string title, string directory, string defaultName, string extensions)
         {
-            var extensions = string.IsNullOrEmpty(extension) ? null : new[] { new ExtensionFilter("", extension) };
-            return SaveFilePanel(title, directory, defaultName, extensions);
+            return SaveFilePanel(title, directory, defaultName, GetExtensionFilters(extensions));
         }
 
         /// <summary>
@@ -202,17 +201,16 @@ namespace USFB
         /// <param name="title">Dialog title</param>
         /// <param name="directory">Root directory</param>
         /// <param name="defaultName">Default file name</param>
-        /// <param name="extension">File extension; null or empty allows all files</param>
+        /// <param name="extensions">File extensions, comma separated; null or empty allows all files</param>
         /// <param name="callback">Optional callback invoked with the chosen FileInfo (null on cancel); can be null</param>
         public static void SaveFilePanelAsync(
             string title,
             string directory,
             string defaultName,
-            string extension,
+            string extensions,
             Action<FileInfo> callback)
         {
-            var extensions = string.IsNullOrEmpty(extension) ? null : new[] { new ExtensionFilter("", extension) };
-            SaveFilePanelAsync(title, directory, defaultName, extensions, callback);
+            SaveFilePanelAsync(title, directory, defaultName, GetExtensionFilters(extensions), callback);
         }
 
         /// <summary>
@@ -237,5 +235,14 @@ namespace USFB
 
             _platformWrapper.SaveFilePanelAsync(title, directory, defaultName, extensions, CallbackWrapper);
         }
+
+        public static ExtensionFilter[] GetExtensionFilters(string input) =>
+            input?
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(ext => ext.Trim())
+                .Where(ext => ext.Length > 0)
+                .Select(ext => new ExtensionFilter(ext.ToUpperInvariant(), ext))
+                .ToArray()
+            ?? Array.Empty<ExtensionFilter>();
     }
 }
