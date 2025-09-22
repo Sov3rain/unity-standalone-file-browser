@@ -1,7 +1,5 @@
-using System;
 using System.IO;
 using NUnit.Framework;
-using USFB;
 
 namespace USFB.Tests
 {
@@ -162,7 +160,7 @@ namespace USFB.Tests
         }
 
         /// <summary>
-        /// Tests SaveFilePanel with empty default name.
+        /// Tests SaveFilePanel with an empty default name.
         /// </summary>
         [Test]
         public void SaveFilePanel_WithEmptyDefaultName_ReturnsFileInfo()

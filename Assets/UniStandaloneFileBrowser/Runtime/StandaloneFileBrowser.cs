@@ -236,17 +236,13 @@ namespace USFB
             _platformWrapper.SaveFilePanelAsync(title, directory, defaultName, extensions, CallbackWrapper);
         }
 
-        public static ExtensionFilter[] GetExtensionFilters(string input)
-        {
-            if (string.IsNullOrEmpty(input))
-                return Array.Empty<ExtensionFilter>();
-
-            return input
+        public static ExtensionFilter[] GetExtensionFilters(string input) =>
+            input?
                 .Split(',', StringSplitOptions.RemoveEmptyEntries)
                 .Select(ext => ext.Trim())
                 .Where(ext => ext.Length > 0)
                 .Select(ext => new ExtensionFilter(ext.ToUpperInvariant(), ext))
-                .ToArray();
-        }
+                .ToArray()
+            ?? Array.Empty<ExtensionFilter>();
     }
 }
