@@ -6,13 +6,15 @@ namespace USFB
     public static class CreateFromHierarchyMenu
     {
         [MenuItem("GameObject/UI/Open File Input", false, 1)]
-        private static void CreateInHierarchy(MenuCommand menuCommand)
+        private static void CreateInHierarchy(MenuCommand menuCommand) => Create("File Input Field");
+
+        private static void Create(string name)
         {
-            var guids = AssetDatabase.FindAssets("File Input Field t:Prefab");
+            var guids = AssetDatabase.FindAssets($"{name} t:Prefab");
 
             if (guids.Length == 0)
             {
-                Debug.LogError("No prefab 'File Input Field' found in project.");
+                Debug.LogError($"No prefab '{name}' found in project.");
                 return;
             }
 
@@ -29,7 +31,7 @@ namespace USFB
 
             if (!go)
             {
-                Debug.LogError("Failed to instantiate prefab 'File Input Field'.");
+                Debug.LogError($"Failed to instantiate prefab '{name}'.");
                 return;
             }
 

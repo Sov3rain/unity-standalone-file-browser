@@ -410,10 +410,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11174393860345d3a86cd0b25c763001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _multiselect: 1
+  _title: 
+  _directory: 
   _accept: png
+  _multiselect: 1
   _button: {fileID: 159525403659067386}
   _text: {fileID: 159525403569843422}
+  OnFileSelected:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &159525402016287687
 GameObject:
   m_ObjectHideFlags: 0
