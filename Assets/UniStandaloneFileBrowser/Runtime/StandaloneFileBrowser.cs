@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 
 namespace USFB
 {
@@ -235,23 +236,20 @@ namespace USFB
             _platformWrapper.SaveFilePanelAsync(title, directory, defaultName, extensions, CallbackWrapper);
         }
 
-        private static ExtensionFilter[] GetExtensionFilters(string input)
+        public static ExtensionFilter[] GetExtensionFilters(string input)
         {
-            if (string.IsNullOrEmpty(input)) return null;
+            if (string.IsNullOrEmpty(input))
+                return Array.Empty<ExtensionFilter>();
 
-            var extensions = input.Split(',');
-
-            if (extensions.Length == 0) return null;
-
-            var extensionFilters = new ExtensionFilter[extensions.Length];
-
-            for (int i = 0; i < extensions.Length; i++)
-            {
-                extensions[i] = extensions[i].Trim();
-                extensionFilters[i] = new ExtensionFilter("", extensions[i]);
-            }
-
-            return extensionFilters;
+            return input
+                .Split(',', StringSplitOptions.RemoveEmptyEntries)
+                .Select(ext => ext.Trim())
+                .Where(ext => ext.Length > 0)
+                .Select(ext => ext.TrimStart('.')) // remove leading dots
+                .Select(ext => ext.ToLowerInvariant())
+                .Distinct() // remove duplicates
+                .Select(ext => new ExtensionFilter(ext.ToUpperInvariant(), ext))
+                .ToArray();
         }
     }
 }
