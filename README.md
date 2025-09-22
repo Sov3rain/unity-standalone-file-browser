@@ -3,22 +3,23 @@
 A simple wrapper for native file dialogs on Windows/Mac/Linux.
 
 - Works in editor and runtime.
-- Open file/folder, save file dialogs supported.
+- Open a file / folder, save file dialogs supported.
 - Multiple file selection.
 - File extension filter.
-- Mono/IL2CPP backends supported.
+- Mono/IL2CPP backends are supported.
 - Linux support by [Ricardo Rodrigues](https://github.com/RicardoEPRodrigues).
 - Basic WebGL support.
 
 ## Installation
 
-Open the Package Manager window, then click on the "+" icon on the top left corner, then select the "Add Package from git URL..." and paste this URL:
+Open the Package Manager window, then click on the "+" icon in the top left corner,
+then select the "Add Package from git URL..." and paste this URL:
 
-`https://github.com/Sov3rain/unity-standalone-file-browser.git#upm`
+`https://github.com/Sov3rain/unity-standalone-file-browser.git?path=/Assets/UniStandaloneFileBrowser`
 
 Install a specific version:
 
-`https://github.com/Sov3rain/unity-standalone-file-browser.git#v1.2.0`
+`https://github.com/Sov3rain/unity-standalone-file-browser.gitpath=/Assets/UniStandaloneFileBrowser#v1.2.0`
 
 ## Example Usage
 
@@ -66,18 +67,18 @@ Linux Screenshot
 Notes:
 - Windows
     * Requires .NET 2.0 api compatibility level 
-    * Async dialog opening not implemented, ..Async methods simply calls regular sync methods.
+    * Async dialog opening isn't implemented, Async method simply calls regular sync methods.
     * Plugin import settings should be like this;
     
     ![Alt text](/Images/win_import_1.jpg?raw=true "Plugin Import Ookii") ![Alt text](/Images/win_import_2.jpg?raw=true "Plugin Import System.Forms")
     
 - Mac
-    * Sync calls are throws an exception at development build after native panel loses and gains focus. Use async calls to avoid this.
+    * Sync calls are throws an exception at development build after the native panel loses and gains focus. Use async calls to avoid this.
 
 WebGL:
  - Basic upload/download file support.
  - File filter support.
- - Not well tested, probably not much reliable.
- - Since browsers require more work to do file operations, webgl isn't directly implemented to Open/Save calls. You can check CanvasSampleScene.unity and canvas sample scripts for example usages.
+ - Not well-tested, probably not much reliable.
+ - Since browsers require more work to do file operations, webgl isn't directly implemented to Open/Save calls. You can check CanvasSampleScene. Unity and canvas sample scripts, for example, usages.
 
  Live Demo: https://gkngkc.github.io/
