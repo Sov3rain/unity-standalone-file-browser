@@ -113,17 +113,16 @@ namespace USFB.Tests
             Assert.AreEqual(0, filter.Extensions.Length, "Extensions array should be empty when input is empty");
         }
         
-        [TestCase("p ng")]
-        [TestCase("*gif")]
-        [TestCase(".jp#g")]
-        [TestCase("")]
-        [TestCase("  ")]
-        [TestCase("png", "jp g")]
-        public void InvalidExtension_ThrowsException(params string[] invalidExtensions)
+        [TestCase("p ng", ExpectedResult = 0)]
+        [TestCase("*gif", ExpectedResult = 0)]
+        [TestCase(".jp#g", ExpectedResult = 0)]
+        [TestCase("", ExpectedResult = 0)]
+        [TestCase("  ", ExpectedResult = 0)]
+        [TestCase("png", "jp g", ExpectedResult = 1)]
+        public int InvalidExtension_IsIgnored(params string[] invalidExtensions)
         {
-            Assert.Throws<ArgumentException>(() =>
-                _ = new ExtensionFilter("Invalid", invalidExtensions)
-            );
+            var filter = new ExtensionFilter("Invalid", invalidExtensions);
+            return filter.Extensions.Length;
         }
 
         #endregion
