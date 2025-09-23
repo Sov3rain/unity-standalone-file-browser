@@ -9,12 +9,12 @@ var StandaloneFileBrowserWebGLPlugin = {
     //     Custom: ".plist, .xml, .yaml"
     // multiselect: Allows multiple file selection
     UploadFile: function(gameObjectNamePtr, methodNamePtr, filterPtr, multiselect) {
-        gameObjectName = UTF8ToString(gameObjectNamePtr);
-        methodName = UTF8ToString(methodNamePtr);
-        filter = UTF8ToString(filterPtr);
+        let gameObjectName = UTF8ToString(gameObjectNamePtr);
+        let methodName = UTF8ToString(methodNamePtr);
+        let filter = UTF8ToString(filterPtr);
 
         // Delete if element exist
-        var fileInput = document.getElementById(gameObjectName)
+        let fileInput = document.getElementById(gameObjectName);
         if (fileInput) {
             document.body.removeChild(fileInput);
         }
@@ -36,8 +36,8 @@ var StandaloneFileBrowserWebGLPlugin = {
         };
         fileInput.onchange = function (event) {
             // multiselect works
-            var urls = [];
-            for (var i = 0; i < event.target.files.length; i++) {
+            let urls = [];
+            for (let i = 0; i < event.target.files.length; i++) {
                 urls.push(URL.createObjectURL(event.target.files[i]));
             }
             // File selected
@@ -62,16 +62,16 @@ var StandaloneFileBrowserWebGLPlugin = {
     // byteArray: byte[]
     // byteArraySize: byte[].Length
     DownloadFile: function(gameObjectNamePtr, methodNamePtr, filenamePtr, byteArray, byteArraySize) {
-        gameObjectName = UTF8ToString(gameObjectNamePtr);
-        methodName = UTF8ToString(methodNamePtr);
-        filename = UTF8ToString(filenamePtr);
+        let gameObjectName = UTF8ToString(gameObjectNamePtr);
+        let methodName = UTF8ToString(methodNamePtr);
+        let filename = UTF8ToString(filenamePtr);
 
-        var bytes = new Uint8Array(byteArraySize);
-        for (var i = 0; i < byteArraySize; i++) {
+        let bytes = new Uint8Array(byteArraySize);
+        for (let i = 0; i < byteArraySize; i++) {
             bytes[i] = HEAPU8[byteArray + i];
         }
 
-        var downloader = window.document.createElement('a');
+        let downloader = window.document.createElement('a');
         downloader.setAttribute('id', gameObjectName);
         downloader.href = window.URL.createObjectURL(new Blob([bytes], { type: 'application/octet-stream' }));
         downloader.download = filename;
