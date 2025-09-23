@@ -1,5 +1,5 @@
 using System;
-using System.Runtime.InteropServices;
+using System.Linq;
 
 namespace USFB
 {
@@ -7,13 +7,6 @@ namespace USFB
     {
         public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
         {
-            // UploadFile(
-            //     gameObjectName: nameof(WebGLCallbackReceiver),
-            //     methodName: nameof(WebGLCallbackReceiver.OnBrowserCallbackHandler),
-            //     filter: ".png, .jpg",
-            //     multiple: multiselect
-            // );
-            // return Array.Empty<string>();
             throw new NotImplementedException();
         }
 
@@ -34,11 +27,24 @@ namespace USFB
             bool multiselect,
             Action<string[]> cb)
         {
-            WebGLCallbackReceiver.Instance.OpenFilePanelAsync(multiselect, cb);
+            WebGLCallbackReceiver.Instance.OpenBrowserFilePanel(GetBrowserFormattedFilter(extensions), multiselect, cb);
+        }
+
+        private string GetBrowserFormattedFilter(ExtensionFilter[] extensions)
+        {
+            if (extensions == null)
+            {
+                return "";
+            }
+
+            return extensions
+                .SelectMany(ext => ext.Extensions)
+                .Aggregate("", (current, fil) => current + $".{fil}, ");
         }
 
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
         {
+            throw new NotImplementedException();
         }
 
         public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions,

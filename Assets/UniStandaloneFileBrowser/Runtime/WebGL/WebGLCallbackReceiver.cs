@@ -24,13 +24,14 @@ public class WebGLCallbackReceiver : MonoBehaviour
 
     // }
 
-    public void OpenFilePanelAsync(bool multiselect, Action<string[]> cb)
+    public void OpenBrowserFilePanel(string filter,bool multiselect, Action<string[]> cb)
     {
         _callback = cb;
-        UploadFile(gameObject.name, nameof(OnBrowserCallbackHandler), "", multiselect);
+        UploadFile(gameObject.name, nameof(OnBrowserMessageHandler), filter, multiselect);
     }
 
-    public void OnBrowserCallbackHandler(string urls)
+    // Called from the browser using SendMessage
+    public void OnBrowserMessageHandler(string urls)
     {
         string[] urlArr = urls?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
         _callback?.Invoke(urlArr);
