@@ -6,20 +6,24 @@ namespace USFB
     public static class CreateFromHierarchyMenu
     {
         [MenuItem("GameObject/UI/Open File Input", false, 1)]
-        private static void CreateInHierarchy(MenuCommand menuCommand) => Create("File Input Field");
+        private static void CreateOpenFileInput() => Create<OpenFileInput>(prefabName: "File Input Field");
 
-        private static void Create(string name)
+        [MenuItem("GameObject/UI/Open Folder Input", false, 2)]
+        private static void CreateOpenFolderInput() => Create<OpenFolderInput>(prefabName: "Folder Input Field");
+
+        private static void Create<T>(string prefabName)
+            where T : MonoBehaviour
         {
-            var guids = AssetDatabase.FindAssets($"{name} t:Prefab");
+            var guids = AssetDatabase.FindAssets($"{prefabName} t:Prefab");
 
             if (guids.Length == 0)
             {
-                Debug.LogError($"No prefab '{name}' found in project.");
+                Debug.LogError($"No prefab '{prefabName}' found in project.");
                 return;
             }
 
             string assetPath = AssetDatabase.GUIDToAssetPath(guids[0]);
-            var prefab = AssetDatabase.LoadAssetAtPath<OpenFileInput>(assetPath);
+            var prefab = AssetDatabase.LoadAssetAtPath<T>(assetPath);
             var parent = Selection.activeGameObject;
 
             if (!parent || !parent.TryGetComponent<Canvas>(out _))
@@ -27,11 +31,11 @@ namespace USFB
                 parent = Object.FindFirstObjectByType<Canvas>().gameObject;
             }
 
-            var go = PrefabUtility.InstantiatePrefab(prefab) as OpenFileInput;
+            T go = PrefabUtility.InstantiatePrefab(prefab) as T;
 
             if (!go)
             {
-                Debug.LogError($"Failed to instantiate prefab '{name}'.");
+                Debug.LogError($"Failed to instantiate prefab '{prefabName}'.");
                 return;
             }
 
