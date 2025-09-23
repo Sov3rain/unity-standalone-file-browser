@@ -15,7 +15,7 @@ var StandaloneFileBrowserWebGLPlugin = {
 
         // Delete if element exist
         let fileInput = document.getElementById(gameObjectName);
-        if (fileInput) {
+        if (fileInput && fileInput.parentNode === document.body) {
             document.body.removeChild(fileInput);
         }
 
@@ -34,6 +34,14 @@ var StandaloneFileBrowserWebGLPlugin = {
             // File dialog opened
             this.value = null;
         };
+
+        // Add cleanup for when user cancels file dialog
+        fileInput.oncancel = function (event) {
+            // User cancelled file dialog - clean up the element
+            if (fileInput && fileInput.parentNode === document.body) {
+                document.body.removeChild(fileInput);
+            }
+        };
         fileInput.onchange = function (event) {
             // multiselect works
             let urls = [];
@@ -43,14 +51,23 @@ var StandaloneFileBrowserWebGLPlugin = {
             // File selected
             SendMessage(gameObjectName, methodName, urls.join());
 
-            // Remove after file selected
-            document.body.removeChild(fileInput);
+            // Remove after file selected - check if element is still a child before removing
+            if (fileInput && fileInput.parentNode === document.body) {
+                document.body.removeChild(fileInput);
+            }
         }
         document.body.appendChild(fileInput);
 
         document.onmouseup = function() {
             fileInput.click();
             document.onmouseup = null;
+
+            // Fallback cleanup after 30 seconds in case dialog events don't fire
+            setTimeout(function() {
+                if (fileInput && fileInput.parentNode === document.body) {
+                    document.body.removeChild(fileInput);
+                }
+            }, 30000);
         }
     },
 
@@ -79,7 +96,10 @@ var StandaloneFileBrowserWebGLPlugin = {
 
         document.onmouseup = function() {
             downloader.click();
-            document.body.removeChild(downloader);
+            // Check if element is still a child before removing
+            if (downloader && downloader.parentNode === document.body) {
+                document.body.removeChild(downloader);
+            }
         	document.onmouseup = null;
 
             SendMessage(gameObjectName, methodName);
