@@ -13,7 +13,9 @@ A simple wrapper for native file dialogs on Windows/Mac/Linux.
 ## Installation
 
 Open the Package Manager window, then click on the "+" icon in the top left corner,
-then select the "Add Package from git URL..." and paste this URL:
+then select the "Add Package from git URL..." and paste one of the following URL:
+
+Install latest version (not recommended):
 
 `https://github.com/Sov3rain/unity-standalone-file-browser.git?path=/Assets/UniStandaloneFileBrowser`
 
