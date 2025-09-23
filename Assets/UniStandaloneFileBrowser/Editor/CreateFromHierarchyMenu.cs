@@ -10,6 +10,9 @@ namespace USFB
 
         [MenuItem("GameObject/UI/Open Folder Input", false, 2)]
         private static void CreateOpenFolderInput() => Create<OpenFolderInput>(prefabName: "Folder Input Field");
+        
+        [MenuItem("GameObject/UI/Save File Input", false, 3)]
+        private static void CreateSaveFileInput() => Create<SaveFileInput>(prefabName: "Save File Input Field");
 
         private static void Create<T>(string prefabName)
             where T : MonoBehaviour

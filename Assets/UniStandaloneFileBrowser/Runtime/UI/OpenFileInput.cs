@@ -1,30 +1,17 @@
 using System.IO;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace USFB
 {
-    public class OpenFileInput : MonoBehaviour
+    public class OpenFileInput : FileInputBase
     {
-        [Header("File Input Settings")]
-        [SerializeField, Tooltip("Dialog title")]
-        private string _title;
-        
-        [SerializeField, Tooltip("Root directory")]
-        private string _directory;
-
         [SerializeField, Tooltip("File extension filter. Example: 'png, jpg, jpeg'")]
         private string _accept;
         
         [SerializeField, Tooltip("Allow multiple file selection, not supported in Editor mode.")]
         private bool _multiselect;
-
-        [Header("UI Elements")]
-        [SerializeField] Button _button;
-        [SerializeField] TMP_Text _text;
 
         [Header("Events")]
         public UnityEvent<FileInfo[]> OnFileSelected;

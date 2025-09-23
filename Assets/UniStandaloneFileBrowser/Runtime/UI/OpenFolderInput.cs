@@ -1,27 +1,14 @@
 using System.IO;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
-using UnityEngine.UI;
 
 namespace USFB
 {
-    public class OpenFolderInput : MonoBehaviour
+    public class OpenFolderInput : FileInputBase
     {
-        [Header("Folder Input Settings")]
-        [SerializeField, Tooltip("Dialog title")]
-        private string _title;
-        
-        [SerializeField, Tooltip("Root directory")]
-        private string _directory;
-        
         [SerializeField, Tooltip("Allow multiple folder selection, not supported in Editor mode.")]
         private bool _multiselect;
-        
-        [Header("UI Elements")]
-        [SerializeField] Button _button;
-        [SerializeField] TMP_Text _text;
         
         [Header("Events")]
         public UnityEvent<DirectoryInfo[]> OnFolderSelected;
