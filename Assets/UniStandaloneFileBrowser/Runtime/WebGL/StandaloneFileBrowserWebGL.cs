@@ -34,7 +34,7 @@ namespace USFB
             bool multiselect,
             Action<string[]> cb)
         {
-            WebGLCallbackReceiver.Instance.OpenFilePanelAsync(title, directory, multiselect, cb);
+            WebGLCallbackReceiver.Instance.OpenFilePanelAsync(multiselect, cb);
         }
 
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)

@@ -15,8 +15,8 @@ public class WebGLCallbackReceiver : MonoBehaviour
     private static void Init()
     {
         Instance = new GameObject(nameof(WebGLCallbackReceiver)).AddComponent<WebGLCallbackReceiver>();
+        Instance.gameObject.hideFlags = HideFlags.NotEditable;
         DontDestroyOnLoad(Instance.gameObject);
-        Instance.gameObject.hideFlags = HideFlags.HideAndDontSave;
     }
 
     // public string[] OpenFilePanel(string title, string directory, bool multiselect)
@@ -24,16 +24,16 @@ public class WebGLCallbackReceiver : MonoBehaviour
 
     // }
 
-    public void OpenFilePanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
+    public void OpenFilePanelAsync(bool multiselect, Action<string[]> cb)
     {
-        Debug.Log($"OpenFilePanelAsync: {title}, {directory}, {multiselect}");
-        UploadFile(gameObject.name, nameof(OnBrowserCallbackHandler), "", multiselect);
         _callback = cb;
+        UploadFile(gameObject.name, nameof(OnBrowserCallbackHandler), "", multiselect);
     }
 
-    public void OnBrowserCallbackHandler(string url)
+    public void OnBrowserCallbackHandler(string urls)
     {
-        _callback(new[] { url });
-        Debug.Log(url);
+        string[] urlArr = urls?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
+        _callback?.Invoke(urlArr);
+        Debug.Log(urls);
     }
 }
