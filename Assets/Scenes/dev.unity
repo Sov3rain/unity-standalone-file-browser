@@ -412,12 +412,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11174393860345d3a86cd0b25c763001, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _button: {fileID: 159525403659067386}
+  _text: {fileID: 159525403569843422}
   _title: 
   _directory: 
   _accept: png
   _multiselect: 1
-  _button: {fileID: 159525403659067386}
-  _text: {fileID: 159525403569843422}
   OnFileSelected:
     m_PersistentCalls:
       m_Calls: []
@@ -881,11 +881,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e1d05a1e9974cd2966d71e4105e3cf5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _button: {fileID: 1577558615874022849}
+  _text: {fileID: 1577558616102784361}
   _title: 
   _directory: 
   _multiselect: 0
-  _button: {fileID: 1577558615874022849}
-  _text: {fileID: 1577558616102784361}
   OnFolderSelected:
     m_PersistentCalls:
       m_Calls: []
@@ -1589,12 +1589,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3d36eabfde724382af32809d790de5c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _button: {fileID: 6703347694131837605}
+  _text: {fileID: 6703347694960895425}
   _title: 
   _directory: 
   _defaultName: 
   _accept: 
-  _button: {fileID: 6703347694131837605}
-  _text: {fileID: 6703347694960895425}
   OnFileSelected:
     m_PersistentCalls:
       m_Calls: []

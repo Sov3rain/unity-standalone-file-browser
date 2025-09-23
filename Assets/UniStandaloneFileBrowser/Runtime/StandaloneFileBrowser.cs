@@ -22,8 +22,8 @@ namespace USFB
             _platformWrapper = new StandaloneFileBrowserWindows();
 #elif UNITY_STANDALONE_LINUX
             _platformWrapper = new StandaloneFileBrowserLinux();
-#else
-            throw new NotSupportedException("Standalone file dialogs are not supported on this platform.");
+#elif UNITY_WEBGL
+            _platformWrapper = new StandaloneFileBrowserWebGL();
 #endif
         }
 

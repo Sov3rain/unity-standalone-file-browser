@@ -6,7 +6,8 @@
         "USFB.Runtime.Linux",
         "USFB.Runtime.Mac",
         "USFB.Runtime.Windows",
-        "Unity.TextMeshPro"
+        "Unity.TextMeshPro",
+        "USFB.Runtime.WebGL"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

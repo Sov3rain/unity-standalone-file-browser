@@ -1,12 +1,12 @@
 {
-    "name": "USFB.Samples",
+    "name": "USFB.Runtime.WebGL",
     "rootNamespace": "",
     "references": [
-        "USFB.Runtime.Common",
-        "USFB.Runtime"
+        "GUID:69f072ba8fc33de469fe24734c3f64fa"
     ],
     "includePlatforms": [
-        "Editor"
+        "Editor",
+        "WebGL"
     ],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
