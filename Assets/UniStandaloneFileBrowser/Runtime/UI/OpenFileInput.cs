@@ -9,7 +9,7 @@ namespace USFB
     {
         [SerializeField, Tooltip("File extension filter. Example: 'png, jpg, jpeg'")]
         private string _accept;
-        
+
         [SerializeField, Tooltip("Allow multiple file selection, not supported in Editor mode.")]
         private bool _multiselect;
 
@@ -18,22 +18,8 @@ namespace USFB
 
         public FileInfo[] Value { get; private set; }
 
-        private void OnEnable()
-        {
-            if (!_button) return;
-            _button.onClick.AddListener(OnClick);
-        }
-
-        private void OnDisable()
-        {
-            if (!_button) return;
-            _button.onClick.RemoveListener(OnClick);
-        }
-
-        private void OnClick()
-        {
+        protected override void OpenFilePanelAsync() =>
             StandaloneFileBrowser.OpenFilePanelAsync(_title, _directory, _accept, _multiselect, OnFileSelectedHandler);
-        }
 
         private void OnFileSelectedHandler(FileInfo[] infos)
         {

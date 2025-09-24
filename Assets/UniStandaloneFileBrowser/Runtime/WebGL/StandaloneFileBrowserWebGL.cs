@@ -27,7 +27,7 @@ namespace USFB
             bool multiselect,
             Action<string[]> cb)
         {
-            WebGLCallbackReceiver.Instance.OpenBrowserFilePanel(GetBrowserFormattedFilter(extensions), multiselect, cb);
+            WebGLCallbackReceiver.Instance.UploadFile(GetBrowserFormattedFilter(extensions), multiselect, cb);
         }
 
         private string GetBrowserFormattedFilter(ExtensionFilter[] extensions)
@@ -47,7 +47,11 @@ namespace USFB
             throw new NotImplementedException();
         }
 
-        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions,
+        public void SaveFilePanelAsync(
+            string title,
+            string directory,
+            string defaultName,
+            ExtensionFilter[] extensions,
             Action<string> cb)
         {
             throw new NotImplementedException();

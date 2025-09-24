@@ -17,22 +17,8 @@ namespace USFB
 
         public FileInfo Value { get; private set; }
 
-        private void OnEnable()
-        {
-            if (!_button) return;
-            _button.onClick.AddListener(OnClick);
-        }
-
-        private void OnDisable()
-        {
-            if (!_button) return;
-            _button.onClick.RemoveListener(OnClick);
-        }
-
-        private void OnClick()
-        {
+        protected override void OpenFilePanelAsync() =>
             StandaloneFileBrowser.SaveFilePanelAsync(_title, _directory, _defaultName, _accept, OnFileSelectedHandler);
-        }
 
         private void OnFileSelectedHandler(FileInfo info)
         {

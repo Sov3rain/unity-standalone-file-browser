@@ -1,5 +1,5 @@
-var StandaloneFileBrowserWebGLPlugin = {
-    // Open file.
+const StandaloneFileBrowserWebGLPlugin = {
+    // Open a file. This creates a hidden file input element and clicks it.
     // gameObjectNamePtr: Unique GameObject name. Required for calling back unity with SendMessage.
     // methodNamePtr: Callback method name on given GameObject.
     // filter: Filter files. Example filters:
@@ -8,12 +8,12 @@ var StandaloneFileBrowserWebGLPlugin = {
     //     Match all audio files: "audio/*"
     //     Custom: ".plist, .xml, .yaml"
     // multiselect: Allows multiple file selection
-    UploadFile: function(gameObjectNamePtr, methodNamePtr, filterPtr, multiselect) {
+    UploadFile: function (gameObjectNamePtr, methodNamePtr, filterPtr, multiselect) {
         let gameObjectName = UTF8ToString(gameObjectNamePtr);
         let methodName = UTF8ToString(methodNamePtr);
         let filter = UTF8ToString(filterPtr);
 
-        // Delete if element exist
+        // Delete the element if already exist
         let fileInput = document.getElementById(gameObjectName);
         if (fileInput && fileInput.parentNode === document.body) {
             document.body.removeChild(fileInput);
@@ -22,8 +22,8 @@ var StandaloneFileBrowserWebGLPlugin = {
         fileInput = document.createElement('input');
         fileInput.setAttribute('id', gameObjectName);
         fileInput.setAttribute('type', 'file');
-        fileInput.setAttribute('style','display:none;');
-        fileInput.setAttribute('style','visibility:hidden;');
+        fileInput.setAttribute('style', 'display:none;');
+        fileInput.setAttribute('style', 'visibility:hidden;');
         if (multiselect) {
             fileInput.setAttribute('multiple', '');
         }
@@ -51,19 +51,19 @@ var StandaloneFileBrowserWebGLPlugin = {
             // File selected
             SendMessage(gameObjectName, methodName, urls.join());
 
-            // Remove after file selected - check if element is still a child before removing
+            // Remove after a file selected - check if the element is still a child before removing
             if (fileInput && fileInput.parentNode === document.body) {
                 document.body.removeChild(fileInput);
             }
         }
         document.body.appendChild(fileInput);
 
-        document.onmouseup = function() {
+        document.onmouseup = function () {
             fileInput.click();
             document.onmouseup = null;
 
             // Fallback cleanup after 30 seconds in case dialog events don't fire
-            setTimeout(function() {
+            setTimeout(function () {
                 if (fileInput && fileInput.parentNode === document.body) {
                     document.body.removeChild(fileInput);
                 }
@@ -78,7 +78,7 @@ var StandaloneFileBrowserWebGLPlugin = {
     // filenamePtr: Filename with extension
     // byteArray: byte[]
     // byteArraySize: byte[].Length
-    DownloadFile: function(gameObjectNamePtr, methodNamePtr, filenamePtr, byteArray, byteArraySize) {
+    DownloadFile: function (gameObjectNamePtr, methodNamePtr, filenamePtr, byteArray, byteArraySize) {
         let gameObjectName = UTF8ToString(gameObjectNamePtr);
         let methodName = UTF8ToString(methodNamePtr);
         let filename = UTF8ToString(filenamePtr);
@@ -90,17 +90,17 @@ var StandaloneFileBrowserWebGLPlugin = {
 
         let downloader = window.document.createElement('a');
         downloader.setAttribute('id', gameObjectName);
-        downloader.href = window.URL.createObjectURL(new Blob([bytes], { type: 'application/octet-stream' }));
+        downloader.href = window.URL.createObjectURL(new Blob([bytes], {type: 'application/octet-stream'}));
         downloader.download = filename;
         document.body.appendChild(downloader);
 
-        document.onmouseup = function() {
+        document.onmouseup = function () {
             downloader.click();
-            // Check if element is still a child before removing
+            // Check if the element is still a child before removing
             if (downloader && downloader.parentNode === document.body) {
                 document.body.removeChild(downloader);
             }
-        	document.onmouseup = null;
+            document.onmouseup = null;
 
             SendMessage(gameObjectName, methodName);
         }

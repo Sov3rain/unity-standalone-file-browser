@@ -2,39 +2,38 @@ using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
-public class WebGLCallbackReceiver : MonoBehaviour
+namespace USFB
 {
-    [DllImport("__Internal")]
-    private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple);
-
-    public static WebGLCallbackReceiver Instance { get; private set; }
-
-    private Action<string[]> _callback;
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void Init()
+    public class WebGLCallbackReceiver : MonoBehaviour
     {
-        Instance = new GameObject(nameof(WebGLCallbackReceiver)).AddComponent<WebGLCallbackReceiver>();
-        Instance.gameObject.hideFlags = HideFlags.NotEditable;
-        DontDestroyOnLoad(Instance.gameObject);
-    }
+        [DllImport("__Internal")]
+        private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple);
 
-    // public string[] OpenFilePanel(string title, string directory, bool multiselect)
-    // {
+        public static WebGLCallbackReceiver Instance { get; private set; }
 
-    // }
+        private Action<string[]> _callback;
 
-    public void OpenBrowserFilePanel(string filter,bool multiselect, Action<string[]> cb)
-    {
-        _callback = cb;
-        UploadFile(gameObject.name, nameof(OnBrowserMessageHandler), filter, multiselect);
-    }
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        private static void Init()
+        {
+            Instance = new GameObject(nameof(WebGLCallbackReceiver)).AddComponent<WebGLCallbackReceiver>();
+            Instance.gameObject.hideFlags = HideFlags.NotEditable;
+            DontDestroyOnLoad(Instance.gameObject);
+        }
 
-    // Called from the browser using SendMessage
-    public void OnBrowserMessageHandler(string urls)
-    {
-        string[] urlArr = urls?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
-        _callback?.Invoke(urlArr);
-        Debug.Log(urls);
+        public void UploadFile(string filter, bool multiselect, Action<string[]> cb)
+        {
+            _callback = cb;
+            UploadFile(gameObject.name, nameof(OnBrowserMessageHandler), filter, multiselect);
+        }
+
+        // Called from the browser using SendMessage
+        public void OnBrowserMessageHandler(string urls)
+        {
+            string[] urlArr = urls?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
+            _callback?.Invoke(urlArr);
+            Debug.Log(urls);
+            _callback = null;
+        }
     }
 }
