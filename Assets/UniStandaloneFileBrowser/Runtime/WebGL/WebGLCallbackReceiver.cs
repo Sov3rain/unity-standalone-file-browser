@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -11,7 +12,7 @@ namespace USFB
 
         public static WebGLCallbackReceiver Instance { get; private set; }
 
-        private Action<string[]> _callback;
+        private Action<FileReference[]> _callback;
 
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
         private static void Init()
@@ -21,7 +22,7 @@ namespace USFB
             DontDestroyOnLoad(Instance.gameObject);
         }
 
-        public void UploadFile(string filter, bool multiselect, Action<string[]> cb)
+        public void UploadFile(string filter, bool multiselect, Action<FileReference[]> cb)
         {
             _callback = cb;
             UploadFile(gameObject.name, nameof(OnBrowserMessageHandler), filter, multiselect);
@@ -30,9 +31,12 @@ namespace USFB
         // Called from the browser using SendMessage
         public void OnBrowserMessageHandler(string urls)
         {
-            string[] urlArr = urls?.Split(',', StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
-            _callback?.Invoke(urlArr);
+            var urlArr = urls?.Split(',')?.Select(FileReference.FromUrl).ToArray()
+                         ?? Array.Empty<FileReference>();
+            
             Debug.Log(urls);
+            
+            _callback?.Invoke(urlArr);
             _callback = null;
         }
     }

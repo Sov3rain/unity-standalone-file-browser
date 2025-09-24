@@ -35,7 +35,7 @@ namespace USFB
         /// <param name="extensions">Allowed extension, comma separated; null or empty allows all files</param>
         /// <param name="multiselect">Allow multiple file selection</param>
         /// <returns>An array of selected files; empty when canceled</returns>
-        public static FileInfo[] OpenFilePanel(string title, string directory, string extensions, bool multiselect)
+        public static FileReference[] OpenFilePanel(string title, string directory, string extensions, bool multiselect)
         {
             return OpenFilePanel(title, directory, GetExtensionFilters(extensions), multiselect);
         }
@@ -48,22 +48,13 @@ namespace USFB
         /// <param name="extensions">List of extension filters; null allows all files. Filter Example: new ExtensionFilter("Image Files", "jpg", "png")</param>
         /// <param name="multiselect">Allow multiple file selection</param>
         /// <returns>An array of selected files; empty when canceled</returns>
-        public static FileInfo[] OpenFilePanel(
+        public static FileReference[] OpenFilePanel(
             string title,
             string directory,
             ExtensionFilter[] extensions,
             bool multiselect)
         {
-            var paths = _platformWrapper.OpenFilePanel(title, directory, extensions, multiselect) ??
-                        Array.Empty<string>();
-            var fileInfos = new FileInfo[paths.Length];
-
-            for (int i = 0; i < paths.Length; i++)
-            {
-                fileInfos[i] = new FileInfo(paths[i]);
-            }
-
-            return fileInfos;
+            return _platformWrapper.OpenFilePanel(title, directory, extensions, multiselect);
         }
 
         /// <summary>
@@ -79,7 +70,7 @@ namespace USFB
             string directory,
             string extensions,
             bool multiselect,
-            Action<FileInfo[]> callback)
+            Action<FileReference[]> callback)
         {
             OpenFilePanelAsync(title, directory, GetExtensionFilters(extensions), multiselect, callback);
         }
@@ -97,21 +88,9 @@ namespace USFB
             string directory,
             ExtensionFilter[] extensions,
             bool multiselect,
-            Action<FileInfo[]> callback)
+            Action<FileReference[]> callback)
         {
-            void CallbackWrapper(string[] paths)
-            {
-                var pathsArray = paths ?? Array.Empty<string>();
-                var fileInfos = new FileInfo[pathsArray.Length];
-                for (int i = 0; i < pathsArray.Length; i++)
-                {
-                    fileInfos[i] = new FileInfo(pathsArray[i]);
-                }
-
-                callback?.Invoke(fileInfos);
-            }
-
-            _platformWrapper.OpenFilePanelAsync(title, directory, extensions, multiselect, CallbackWrapper);
+            _platformWrapper.OpenFilePanelAsync(title, directory, extensions, multiselect, callback);
         }
 
         /// <summary>

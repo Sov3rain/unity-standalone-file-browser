@@ -41,7 +41,7 @@ public class CanvasSampleOpenFileText : MonoBehaviour, IPointerDownHandler {
     private void OnClick() {
         var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", "txt", false);
         if (paths.Length > 0) {
-            StartCoroutine(OutputRoutine(new Uri(paths[0].FullName).AbsoluteUri));
+            StartCoroutine(OutputRoutine(new Uri(paths[0].PathOrUrl).AbsoluteUri));
         }
     }
 #endif

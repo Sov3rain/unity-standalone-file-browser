@@ -1,3 +1,5 @@
+#if UNITY_WEBGL
+
 using System;
 using System.Linq;
 
@@ -5,7 +7,7 @@ namespace USFB
 {
     public class StandaloneFileBrowserWebGL : IStandaloneFileBrowser
     {
-        public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
+        public FileReference[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
         {
             throw new NotImplementedException();
         }
@@ -25,7 +27,7 @@ namespace USFB
             string directory,
             ExtensionFilter[] extensions,
             bool multiselect,
-            Action<string[]> cb)
+            Action<FileReference[]> cb)
         {
             WebGLCallbackReceiver.Instance.UploadFile(GetBrowserFormattedFilter(extensions), multiselect, cb);
         }
@@ -58,3 +60,4 @@ namespace USFB
         }
     }
 }
+#endif

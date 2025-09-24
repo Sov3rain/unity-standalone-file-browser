@@ -1,4 +1,3 @@
-using System.IO;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
@@ -14,14 +13,14 @@ namespace USFB
         private bool _multiselect;
 
         [Header("Events")]
-        public UnityEvent<FileInfo[]> OnFileSelected;
+        public UnityEvent<FileReference[]> OnFileSelected;
 
-        public FileInfo[] Value { get; private set; }
+        public FileReference[] Value { get; private set; }
 
         protected override void OpenFilePanelAsync() =>
             StandaloneFileBrowser.OpenFilePanelAsync(_title, _directory, _accept, _multiselect, OnFileSelectedHandler);
 
-        private void OnFileSelectedHandler(FileInfo[] infos)
+        private void OnFileSelectedHandler(FileReference[] infos)
         {
             Value = infos;
 
@@ -30,7 +29,7 @@ namespace USFB
                 _text.text = infos.Length switch
                 {
                     > 1 => $"{infos.Length} files",
-                    1 => infos.ElementAtOrDefault(0)?.FullName,
+                    1 => infos.ElementAtOrDefault(0)?.PathOrUrl,
                     _ => "No file chosen",
                 };
             }

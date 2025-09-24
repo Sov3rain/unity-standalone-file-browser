@@ -40,7 +40,7 @@ public class CanvasSampleOpenFileImage : MonoBehaviour, IPointerDownHandler {
     private void OnClick() {
         var paths = StandaloneFileBrowser.OpenFilePanel("Title", "", ".png", false);
         if (paths.Length > 0) {
-            StartCoroutine(OutputRoutine(new System.Uri(paths[0].FullName).AbsoluteUri));
+            StartCoroutine(OutputRoutine(new System.Uri(paths[0].PathOrUrl).AbsoluteUri));
         }
     }
 #endif

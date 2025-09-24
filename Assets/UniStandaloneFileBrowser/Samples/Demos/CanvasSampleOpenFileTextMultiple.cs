@@ -43,7 +43,7 @@ public class CanvasSampleOpenFileTextMultiple : MonoBehaviour, IPointerDownHandl
         if (paths.Length > 0) {
             var urlArr = new List<string>(paths.Length);
             for (int i = 0; i < paths.Length; i++) {
-                urlArr.Add(new System.Uri(paths[i].FullName).AbsoluteUri);
+                urlArr.Add(new System.Uri(paths[i].PathOrUrl).AbsoluteUri);
             }
             StartCoroutine(OutputRoutine(urlArr.ToArray()));
         }
