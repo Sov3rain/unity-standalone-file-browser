@@ -1,10 +1,11 @@
 {
     "name": "USFB.Runtime.Windows",
+    "rootNamespace": "",
     "references": [
         "USFB.Runtime.Common"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [
+        "Editor",
         "WindowsStandalone32",
         "WindowsStandalone64"
     ],
@@ -13,5 +14,7 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

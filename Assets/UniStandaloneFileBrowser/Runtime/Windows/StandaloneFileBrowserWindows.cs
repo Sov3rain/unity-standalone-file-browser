@@ -1,4 +1,4 @@
-#if UNITY_STANDALONE_WIN || UNITY_EDITOR_WIN
+#if UNITY_STANDALONE_WIN || UNITY_EDITOR
 
 using System;
 using System.IO;
@@ -15,24 +15,49 @@ namespace USFB
         [DllImport("user32.dll")]
         private static extern IntPtr GetActiveWindow();
 
-        public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
+        public FileReference[] OpenFilePanel(
+            string title,
+            string directory,
+            ExtensionFilter[] extensions,
+            bool multiselect)
         {
             var shellFilters = GetShellFilterFromFileExtensionList(extensions);
+
             if (multiselect)
             {
-                var paths = ShellFileDialogs.FileOpenDialog.ShowMultiSelectDialog(GetActiveWindow(), title, directory, string.Empty, shellFilters, null);
-                return paths == null || paths.Count == 0 ? new string[0] : paths.ToArray();
+                IReadOnlyList<string> paths = ShellFileDialogs.FileOpenDialog.ShowMultiSelectDialog(
+                    GetActiveWindow(),
+                    title,
+                    directory,
+                    string.Empty,
+                    shellFilters,
+                    null
+                );
+
+                return paths?.Select(FileReference.FromPath).ToArray() ?? Array.Empty<FileReference>();
             }
-            else
-            {
-                var path = ShellFileDialogs.FileOpenDialog.ShowSingleSelectDialog(GetActiveWindow(), title, directory, string.Empty, shellFilters, null);
-                return string.IsNullOrEmpty(path) ? new string[0] : new[] { path };
-            }
+
+            string path = ShellFileDialogs.FileOpenDialog.ShowSingleSelectDialog(
+                GetActiveWindow(),
+                title,
+                directory,
+                string.Empty,
+                shellFilters,
+                null
+            );
+
+            return !string.IsNullOrEmpty(path) ? new[] { FileReference.FromPath(path) } : Array.Empty<FileReference>();
         }
 
-        public void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect, Action<string[]> cb)
+        public void OpenFilePanelAsync(
+            string title,
+            string directory,
+            ExtensionFilter[] extensions,
+            bool multiselect,
+            Action<FileReference[]> callback
+        )
         {
-            cb?.Invoke(OpenFilePanel(title, directory, extensions, multiselect));
+            callback?.Invoke(OpenFilePanel(title, directory, extensions, multiselect));
         }
 
         public string[] OpenFolderPanel(string title, string directory, bool multiselect)
@@ -63,15 +88,18 @@ namespace USFB
             if (shellFilters.Length > 0 && !string.IsNullOrEmpty(finalFilename))
             {
                 var extension = $".{shellFilters[0].Extensions[0]}";
-                if (!string.IsNullOrEmpty(extension) && !finalFilename.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
+                if (!string.IsNullOrEmpty(extension) &&
+                    !finalFilename.EndsWith(extension, StringComparison.CurrentCultureIgnoreCase))
                     finalFilename += extension;
             }
 
-            var path = ShellFileDialogs.FileSaveDialog.ShowDialog(GetActiveWindow(), title, directory, finalFilename, shellFilters, 0);
+            var path = ShellFileDialogs.FileSaveDialog.ShowDialog(GetActiveWindow(), title, directory, finalFilename,
+                shellFilters, 0);
             return path;
         }
 
-        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<string> cb)
+        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions,
+            Action<string> cb)
         {
             cb?.Invoke(SaveFilePanel(title, directory, defaultName, extensions));
         }
@@ -98,12 +126,15 @@ namespace USFB
                                 extensionFormatted.Append(";");
                             extensionFormatted.Append($"*.{extensionStr}");
                         }
+
                         displayName = $"({extensionFormatted})";
                     }
+
                     var filter = new ShellFileDialogs.Filter(displayName, extension.Extensions);
                     shellFilters.Add(filter);
                 }
             }
+
             if (shellFilters.Count == 0)
             {
                 shellFilters.AddRange(ShellFileDialogs.Filter.ParseWindowsFormsFilter(@"All files (*.*)|*.*"));
@@ -125,6 +156,7 @@ namespace USFB
             {
                 return directory;
             }
+
             return Path.GetDirectoryName(directoryPath) + Path.DirectorySeparatorChar;
         }
     }

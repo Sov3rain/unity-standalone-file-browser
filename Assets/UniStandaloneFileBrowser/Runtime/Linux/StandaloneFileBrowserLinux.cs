@@ -1,7 +1,8 @@
-#if UNITY_STANDALONE_LINUX
+#if UNITY_STANDALONE_LINUX || UNITY_EDITOR
 
 using System;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
 
@@ -18,45 +19,73 @@ namespace USFB
 
         [DllImport("StandaloneFileBrowser")]
         private static extern void DialogInit();
+
         [DllImport("StandaloneFileBrowser")]
-        private static extern IntPtr DialogOpenFilePanel(string title, string directory, string extension, bool multiselect);
+        private static extern IntPtr DialogOpenFilePanel(string title, string directory, string extension,
+            bool multiselect);
+
         [DllImport("StandaloneFileBrowser")]
-        private static extern void DialogOpenFilePanelAsync(string title, string directory, string extension, bool multiselect, AsyncCallback callback);
+        private static extern void DialogOpenFilePanelAsync(string title, string directory, string extension,
+            bool multiselect, AsyncCallback callback);
+
         [DllImport("StandaloneFileBrowser")]
         private static extern IntPtr DialogOpenFolderPanel(string title, string directory, bool multiselect);
+
         [DllImport("StandaloneFileBrowser")]
-        private static extern void DialogOpenFolderPanelAsync(string title, string directory, bool multiselect, AsyncCallback callback);
+        private static extern void DialogOpenFolderPanelAsync(string title, string directory, bool multiselect,
+            AsyncCallback callback);
+
         [DllImport("StandaloneFileBrowser")]
-        private static extern IntPtr DialogSaveFilePanel(string title, string directory, string defaultName, string extension);
+        private static extern IntPtr DialogSaveFilePanel(string title, string directory, string defaultName,
+            string extension);
+
         [DllImport("StandaloneFileBrowser")]
-        private static extern void DialogSaveFilePanelAsync(string title, string directory, string defaultName, string extension, AsyncCallback callback);
+        private static extern void DialogSaveFilePanelAsync(string title, string directory, string defaultName,
+            string extension, AsyncCallback callback);
+
+        private const char FILE_SEPARATOR = (char)28;
 
         public StandaloneFileBrowserLinux()
         {
             DialogInit();
         }
 
-        public string[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
+        public FileReference[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions,
+            bool multiselect)
         {
             var paths = Marshal.PtrToStringAnsi(DialogOpenFilePanel(
                 title,
                 directory,
                 GetFilterFromFileExtensionList(extensions),
                 multiselect));
-            return paths.Split((char)28);
+
+            return paths?.Split(FILE_SEPARATOR).Select(FileReference.FromPath).ToArray() ??
+                   Array.Empty<FileReference>();
         }
 
-        public void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect, Action<string[]> cb)
+        public void OpenFilePanelAsync(
+            string title, 
+            string directory,
+            ExtensionFilter[] extensions,
+            bool multiselect,
+            Action<FileReference[]> callback)
         {
-            _openFileCb = cb;
-            if (cb != null)
+            // _openFileCb = cb;
+            _openFileCb = CallbackWrapper;
+            
+            void CallbackWrapper(string[] paths)
+            {
+                callback?.Invoke(paths?.Select(FileReference.FromPath).ToArray() ?? Array.Empty<FileReference>());
+            }
+            
+            if (callback != null)
             {
                 DialogOpenFilePanelAsync(
                     title,
                     directory,
                     GetFilterFromFileExtensionList(extensions),
                     multiselect,
-                    (string result) => { _openFileCb?.Invoke(result.Split((char)28)); });
+                    result => { _openFileCb?.Invoke(result.Split(FILE_SEPARATOR)); });
             }
         }
 
@@ -66,7 +95,7 @@ namespace USFB
                 title,
                 directory,
                 multiselect));
-            return paths.Split((char)28);
+            return paths.Split(FILE_SEPARATOR);
         }
 
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
@@ -78,7 +107,7 @@ namespace USFB
                     title,
                     directory,
                     multiselect,
-                    (string result) => { _openFolderCb?.Invoke(result.Split((char)28)); });
+                    (string result) => { _openFolderCb?.Invoke(result.Split(FILE_SEPARATOR)); });
             }
         }
 
@@ -91,7 +120,8 @@ namespace USFB
                 GetFilterFromFileExtensionList(extensions)));
         }
 
-        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions, Action<string> cb)
+        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions,
+            Action<string> cb)
         {
             _saveFileCb = cb;
             if (cb != null)
@@ -125,6 +155,7 @@ namespace USFB
                 filterString = filterString.Remove(filterString.Length - 1);
                 filterString += "|";
             }
+
             filterString = filterString.Remove(filterString.Length - 1);
             return filterString;
         }

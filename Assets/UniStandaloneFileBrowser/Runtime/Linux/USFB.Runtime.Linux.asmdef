@@ -5,6 +5,7 @@
         "USFB.Runtime.Common"
     ],
     "includePlatforms": [
+        "Editor",
         "LinuxStandalone64"
     ],
     "excludePlatforms": [],

@@ -8,7 +8,10 @@ namespace USFB
 {
     public class StandaloneFileBrowserEditor : IStandaloneFileBrowser
     {
-        public FileReference[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions,
+        public FileReference[] OpenFilePanel(
+            string title,
+            string directory,
+            ExtensionFilter[] extensions,
             bool multiselect)
         {
             string path;
@@ -28,10 +31,14 @@ namespace USFB
                 : new[] { FileReference.FromPath(path) };
         }
 
-        public void OpenFilePanelAsync(string title, string directory, ExtensionFilter[] extensions, bool multiselect,
-            Action<FileReference[]> cb)
+        public void OpenFilePanelAsync(
+            string title,
+            string directory,
+            ExtensionFilter[] extensions,
+            bool multiselect,
+            Action<FileReference[]> callback)
         {
-            cb?.Invoke(OpenFilePanel(title, directory, extensions, multiselect));
+            callback?.Invoke(OpenFilePanel(title, directory, extensions, multiselect));
         }
 
         public string[] OpenFolderPanel(string title, string directory, bool multiselect)

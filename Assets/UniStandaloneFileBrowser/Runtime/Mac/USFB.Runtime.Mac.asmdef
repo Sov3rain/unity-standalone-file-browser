@@ -1,10 +1,11 @@
 {
     "name": "USFB.Runtime.Mac",
+    "rootNamespace": "",
     "references": [
         "USFB.Runtime.Common"
     ],
-    "optionalUnityReferences": [],
     "includePlatforms": [
+        "Editor",
         "macOSStandalone"
     ],
     "excludePlatforms": [],
@@ -12,5 +13,7 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": []
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
