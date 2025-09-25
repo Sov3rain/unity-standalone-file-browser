@@ -10,6 +10,14 @@ namespace USFB
         [DllImport("__Internal")]
         private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple);
 
+        [DllImport("__Internal")]
+        private static extern void DownloadFile(
+            string gameObjectName,
+            string methodName,
+            string filename,
+            byte[] byteArray,
+            int byteArraySize);
+
         public static WebGLCallbackReceiver Instance { get; private set; }
 
         private Action<FileReference[]> _callback;
@@ -25,22 +33,29 @@ namespace USFB
 #endif
         }
 
-        public void UploadFile(string filter, bool multiselect, Action<FileReference[]> cb)
+        public void UploadFile(string filter, bool multiselect, Action<FileReference[]> callback)
         {
-            _callback = cb;
-            UploadFile(gameObject.name, nameof(OnBrowserMessageHandler), filter, multiselect);
+            _callback = callback;
+            UploadFile(gameObject.name, nameof(OnUploadComplete), filter, multiselect);
+        }
+
+        public void DownloadFile(string filename, byte[] data)
+        {
+            DownloadFile(gameObject.name, nameof(OnDownloadComplete), filename, data, data.Length);
         }
 
         // Called from the browser using SendMessage
-        public void OnBrowserMessageHandler(string urls)
+        public void OnUploadComplete(string urls)
         {
-            var urlArr = urls?.Split(',')?.Select(FileReference.FromUrl).ToArray()
-                         ?? Array.Empty<FileReference>();
+            FileReference[] fileRefs = urls?.Split(',')?.Select(FileReference.FromUrl).ToArray()
+                                     ?? Array.Empty<FileReference>();
 
-            Debug.Log(urls);
-
-            _callback?.Invoke(urlArr);
+            _callback?.Invoke(fileRefs);
             _callback = null;
+        }
+
+        public void OnDownloadComplete(string _)
+        {
         }
     }
 }

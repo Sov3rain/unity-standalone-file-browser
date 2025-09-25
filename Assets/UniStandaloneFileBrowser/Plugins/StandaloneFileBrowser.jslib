@@ -104,8 +104,8 @@ const StandaloneFileBrowserWebGLPlugin = {
 
         document.onmouseup = function () {
             downloader.click();
-            // Check if the element is still a child before removing
 
+            // Check if the element is still a child before removing
             if (downloader && downloader.parentNode === document.body) {
                 document.body.removeChild(downloader);
             }

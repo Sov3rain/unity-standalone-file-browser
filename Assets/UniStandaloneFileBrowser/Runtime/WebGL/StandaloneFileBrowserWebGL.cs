@@ -2,24 +2,28 @@
 
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace USFB
 {
     public class StandaloneFileBrowserWebGL : IStandaloneFileBrowser
     {
-        public FileReference[] OpenFilePanel(string title, string directory, ExtensionFilter[] extensions, bool multiselect)
+        public FileReference[] OpenFilePanel(
+            string title,
+            string directory,
+            ExtensionFilter[] extensions,
+            bool multiselect)
         {
-            throw new NotImplementedException();
-        }
+            var tcs = new TaskCompletionSource<FileReference[]>();
 
-        public string[] OpenFolderPanel(string title, string directory, bool multiselect)
-        {
-            throw new NotImplementedException();
-        }
+            WebGLCallbackReceiver.Instance.UploadFile(
+                filter: GetBrowserFormattedFilter(extensions),
+                multiselect: multiselect,
+                callback: tcs.SetResult
+            );
 
-        public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
-        {
-            throw new NotImplementedException();
+            // Blocking call
+            return tcs.Task.GetAwaiter().GetResult();
         }
 
         public void OpenFilePanelAsync(
@@ -27,9 +31,34 @@ namespace USFB
             string directory,
             ExtensionFilter[] extensions,
             bool multiselect,
-            Action<FileReference[]> cb)
+            Action<FileReference[]> callback)
         {
-            WebGLCallbackReceiver.Instance.UploadFile(GetBrowserFormattedFilter(extensions), multiselect, cb);
+            WebGLCallbackReceiver.Instance.UploadFile(GetBrowserFormattedFilter(extensions), multiselect, callback);
+        }
+
+        public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
+        {
+            throw new NotImplementedException($"{nameof(SaveFilePanel)} is not available for WebGL.");
+        }
+
+        public void SaveFilePanelAsync(
+            string title,
+            string directory,
+            string defaultName,
+            ExtensionFilter[] extensions,
+            Action<string> cb)
+        {
+            throw new NotImplementedException($"{nameof(SaveFilePanelAsync)} is not available for WebGL.");
+        }
+
+        public string[] OpenFolderPanel(string title, string directory, bool multiselect)
+        {
+            throw new NotImplementedException($"{nameof(OpenFolderPanel)} is not available for WebGL.");
+        }
+
+        public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
+        {
+            throw new NotImplementedException($"{nameof(OpenFolderPanelAsync)} is not available for WebGL.");
         }
 
         private string GetBrowserFormattedFilter(ExtensionFilter[] extensions)
@@ -42,21 +71,6 @@ namespace USFB
             return extensions
                 .SelectMany(ext => ext.Extensions)
                 .Aggregate("", (current, fil) => current + $".{fil}, ");
-        }
-
-        public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void SaveFilePanelAsync(
-            string title,
-            string directory,
-            string defaultName,
-            ExtensionFilter[] extensions,
-            Action<string> cb)
-        {
-            throw new NotImplementedException();
         }
     }
 }
