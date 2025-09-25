@@ -38,7 +38,7 @@ namespace USFB
 
         public FileReference SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
         {
-            throw new NotImplementedException($"{nameof(SaveFilePanel)} is not available for WebGL.");
+            throw new NotSupportedException($"{nameof(SaveFilePanel)} is not available for WebGL.");
         }
 
         public void SaveFilePanelAsync(
@@ -48,17 +48,17 @@ namespace USFB
             ExtensionFilter[] extensions,
             Action<FileReference> callback)
         {
-            throw new NotImplementedException($"{nameof(SaveFilePanelAsync)} is not available for WebGL.");
+            throw new NotSupportedException($"{nameof(SaveFilePanelAsync)} is not available for WebGL.");
         }
 
         public string[] OpenFolderPanel(string title, string directory, bool multiselect)
         {
-            throw new NotImplementedException($"{nameof(OpenFolderPanel)} is not available for WebGL.");
+            throw new NotSupportedException($"{nameof(OpenFolderPanel)} is not available for WebGL.");
         }
 
         public void OpenFolderPanelAsync(string title, string directory, bool multiselect, Action<string[]> cb)
         {
-            throw new NotImplementedException($"{nameof(OpenFolderPanelAsync)} is not available for WebGL.");
+            throw new NotSupportedException($"{nameof(OpenFolderPanelAsync)} is not available for WebGL.");
         }
 
         private string GetBrowserFormattedFilter(ExtensionFilter[] extensions)
