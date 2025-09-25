@@ -14,12 +14,15 @@ namespace USFB
 
         private Action<FileReference[]> _callback;
 
-        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
         private static void Init()
         {
+            // Create a singleton instance of WebGLCallbackReceiver
+#if UNITY_WEBGL && !UNITY_EDITOR
             Instance = new GameObject(nameof(WebGLCallbackReceiver)).AddComponent<WebGLCallbackReceiver>();
             Instance.gameObject.hideFlags = HideFlags.NotEditable;
             DontDestroyOnLoad(Instance.gameObject);
+#endif
         }
 
         public void UploadFile(string filter, bool multiselect, Action<FileReference[]> cb)
@@ -33,9 +36,9 @@ namespace USFB
         {
             var urlArr = urls?.Split(',')?.Select(FileReference.FromUrl).ToArray()
                          ?? Array.Empty<FileReference>();
-            
+
             Debug.Log(urls);
-            
+
             _callback?.Invoke(urlArr);
             _callback = null;
         }

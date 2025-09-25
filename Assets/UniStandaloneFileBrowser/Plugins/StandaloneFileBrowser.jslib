@@ -15,6 +15,7 @@ const StandaloneFileBrowserWebGLPlugin = {
 
         // Delete the element if already exist
         let fileInput = document.getElementById(gameObjectName);
+
         if (fileInput && fileInput.parentNode === document.body) {
             document.body.removeChild(fileInput);
         }
@@ -24,12 +25,15 @@ const StandaloneFileBrowserWebGLPlugin = {
         fileInput.setAttribute('type', 'file');
         fileInput.setAttribute('style', 'display:none;');
         fileInput.setAttribute('style', 'visibility:hidden;');
+
         if (multiselect) {
             fileInput.setAttribute('multiple', '');
         }
+
         if (filter) {
             fileInput.setAttribute('accept', filter);
         }
+
         fileInput.onclick = function (event) {
             // File dialog opened
             this.value = null;
@@ -42,12 +46,15 @@ const StandaloneFileBrowserWebGLPlugin = {
                 document.body.removeChild(fileInput);
             }
         };
+
         fileInput.onchange = function (event) {
             // multiselect works
             let urls = [];
+
             for (let i = 0; i < event.target.files.length; i++) {
                 urls.push(URL.createObjectURL(event.target.files[i]));
             }
+
             // File selected
             SendMessage(gameObjectName, methodName, urls.join());
 
@@ -56,6 +63,7 @@ const StandaloneFileBrowserWebGLPlugin = {
                 document.body.removeChild(fileInput);
             }
         }
+
         document.body.appendChild(fileInput);
 
         document.onmouseup = function () {
@@ -82,8 +90,8 @@ const StandaloneFileBrowserWebGLPlugin = {
         let gameObjectName = UTF8ToString(gameObjectNamePtr);
         let methodName = UTF8ToString(methodNamePtr);
         let filename = UTF8ToString(filenamePtr);
-
         let bytes = new Uint8Array(byteArraySize);
+
         for (let i = 0; i < byteArraySize; i++) {
             bytes[i] = HEAPU8[byteArray + i];
         }
@@ -97,11 +105,12 @@ const StandaloneFileBrowserWebGLPlugin = {
         document.onmouseup = function () {
             downloader.click();
             // Check if the element is still a child before removing
+
             if (downloader && downloader.parentNode === document.body) {
                 document.body.removeChild(downloader);
             }
-            document.onmouseup = null;
 
+            document.onmouseup = null;
             SendMessage(gameObjectName, methodName);
         }
     }
