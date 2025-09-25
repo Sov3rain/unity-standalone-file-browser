@@ -52,17 +52,26 @@ namespace USFB
             cb?.Invoke(OpenFolderPanel(title, directory, multiselect));
         }
 
-        public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
+        public FileReference SaveFilePanel(
+            string title, 
+            string directory, 
+            string defaultName,
+            ExtensionFilter[] extensions)
         {
             string ext = extensions?.ElementAtOrDefault(0).Extensions?.ElementAtOrDefault(0) ?? "";
             string name = string.IsNullOrEmpty(ext) ? defaultName : defaultName + "." + ext;
-            return EditorUtility.SaveFilePanel(title, directory, name, ext);
+            string path = EditorUtility.SaveFilePanel(title, directory, name, ext);
+            return FileReference.FromPath(path);
         }
 
-        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions,
-            Action<string> cb)
+        public void SaveFilePanelAsync(
+            string title, 
+            string directory, 
+            string defaultName, 
+            ExtensionFilter[] extensions,
+            Action<FileReference> callback)
         {
-            cb?.Invoke(SaveFilePanel(title, directory, defaultName, extensions));
+            callback?.Invoke(SaveFilePanel(title, directory, defaultName, extensions));
         }
 
         // EditorUtility.OpenFilePanelWithFilters extension filter format

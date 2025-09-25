@@ -151,7 +151,7 @@ namespace USFB
         /// <param name="defaultName">Default file name</param>
         /// <param name="extensions">File extensions, comma separated; null or empty allows all files</param>
         /// <returns>The chosen FileInfo; null when canceled</returns>
-        public static FileInfo SaveFilePanel(string title, string directory, string defaultName, string extensions)
+        public static FileReference SaveFilePanel(string title, string directory, string defaultName, string extensions)
         {
             return SaveFilePanel(title, directory, defaultName, GetExtensionFilters(extensions));
         }
@@ -164,14 +164,13 @@ namespace USFB
         /// <param name="defaultName">Default file name</param>
         /// <param name="extensions">List of extension filters; null allows all files. Filter Example: new ExtensionFilter("Image Files", "jpg", "png")</param>
         /// <returns>The chosen FileInfo; null when canceled</returns>
-        public static FileInfo SaveFilePanel(
+        public static FileReference SaveFilePanel(
             string title,
             string directory,
             string defaultName,
             ExtensionFilter[] extensions)
         {
-            var path = _platformWrapper.SaveFilePanel(title, directory, defaultName, extensions);
-            return string.IsNullOrEmpty(path) ? null : new FileInfo(path);
+            return _platformWrapper.SaveFilePanel(title, directory, defaultName, extensions);
         }
 
         /// <summary>
@@ -187,7 +186,7 @@ namespace USFB
             string directory,
             string defaultName,
             string extensions,
-            Action<FileInfo> callback)
+            Action<FileReference> callback)
         {
             SaveFilePanelAsync(title, directory, defaultName, GetExtensionFilters(extensions), callback);
         }
@@ -205,14 +204,9 @@ namespace USFB
             string directory,
             string defaultName,
             ExtensionFilter[] extensions,
-            Action<FileInfo> callback)
+            Action<FileReference> callback)
         {
-            void CallbackWrapper(string path)
-            {
-                callback?.Invoke(string.IsNullOrEmpty(path) ? null : new FileInfo(path));
-            }
-
-            _platformWrapper.SaveFilePanelAsync(title, directory, defaultName, extensions, CallbackWrapper);
+            _platformWrapper.SaveFilePanelAsync(title, directory, defaultName, extensions, callback);
         }
 
         public static ExtensionFilter[] GetExtensionFilters(string input) =>

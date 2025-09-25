@@ -36,7 +36,7 @@ namespace USFB
             WebGLCallbackReceiver.Instance.UploadFile(GetBrowserFormattedFilter(extensions), multiselect, callback);
         }
 
-        public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
+        public FileReference SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
         {
             throw new NotImplementedException($"{nameof(SaveFilePanel)} is not available for WebGL.");
         }
@@ -46,7 +46,7 @@ namespace USFB
             string directory,
             string defaultName,
             ExtensionFilter[] extensions,
-            Action<string> cb)
+            Action<FileReference> callback)
         {
             throw new NotImplementedException($"{nameof(SaveFilePanelAsync)} is not available for WebGL.");
         }

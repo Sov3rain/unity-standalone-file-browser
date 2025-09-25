@@ -1,4 +1,3 @@
-using System.IO;
 using UnityEngine;
 using UnityEngine.Events;
 
@@ -13,23 +12,23 @@ namespace USFB
         private string _accept;
 
         [Header("Events")]
-        public UnityEvent<FileInfo> OnFileSelected;
+        public UnityEvent<FileReference> OnFileSelected;
 
-        public FileInfo Value { get; private set; }
+        public FileReference Value { get; private set; }
 
         protected override void OpenFilePanelAsync() =>
             StandaloneFileBrowser.SaveFilePanelAsync(_title, _directory, _defaultName, _accept, OnFileSelectedHandler);
 
-        private void OnFileSelectedHandler(FileInfo info)
+        private void OnFileSelectedHandler(FileReference fileRef)
         {
-            Value = info;
+            Value = fileRef;
 
             if (_text)
             {
-                _text.text = info is null ? "No file chosen" : info.FullName;
+                _text.text = fileRef is null ? "No file chosen" : fileRef.PathOrUrl;
             }
 
-            OnFileSelected?.Invoke(info);
+            OnFileSelected?.Invoke(fileRef);
         }
     }
 }

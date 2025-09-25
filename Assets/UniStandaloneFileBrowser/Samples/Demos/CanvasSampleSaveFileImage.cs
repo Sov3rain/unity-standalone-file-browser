@@ -58,7 +58,7 @@ public class CanvasSampleSaveFileImage : MonoBehaviour, IPointerDownHandler {
     public void OnClick() {
         var path = StandaloneFileBrowser.SaveFilePanel("Title", "", "sample", "png");
         if (path is not null) {
-            File.WriteAllBytes(path.FullName, _textureBytes);
+            File.WriteAllBytes(path.PathOrUrl, _textureBytes);
         }
     }
 #endif

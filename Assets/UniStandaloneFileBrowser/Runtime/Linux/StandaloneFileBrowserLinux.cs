@@ -1,10 +1,8 @@
 #if UNITY_STANDALONE_LINUX || UNITY_EDITOR
 
 using System;
-using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
-using UnityEngine;
 
 namespace USFB
 {
@@ -111,27 +109,39 @@ namespace USFB
             }
         }
 
-        public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
+        public FileReference SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
         {
-            return Marshal.PtrToStringAnsi(DialogSaveFilePanel(
+            string path = Marshal.PtrToStringAnsi(DialogSaveFilePanel(
                 title,
                 directory,
                 defaultName,
                 GetFilterFromFileExtensionList(extensions)));
+            
+            return FileReference.FromPath(path);
         }
 
-        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions,
-            Action<string> cb)
+        public void SaveFilePanelAsync(
+            string title, 
+            string directory, 
+            string defaultName, 
+            ExtensionFilter[] extensions,
+            Action<FileReference> callback)
         {
-            _saveFileCb = cb;
-            if (cb != null)
+            _saveFileCb = CallbackWrapper;
+            
+            void CallbackWrapper(string path)
+            {
+                callback?.Invoke(FileReference.FromPath(path));
+            }
+            
+            if (callback != null)
             {
                 DialogSaveFilePanelAsync(
                     title,
                     directory,
                     defaultName,
                     GetFilterFromFileExtensionList(extensions),
-                    (string result) => { _saveFileCb?.Invoke(result); });
+                    result => { _saveFileCb?.Invoke(result); });
             }
         }
 

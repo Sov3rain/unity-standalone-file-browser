@@ -45,7 +45,7 @@ public class CanvasSampleSaveFileText : MonoBehaviour, IPointerDownHandler {
     public void OnClick() {
         var path = StandaloneFileBrowser.SaveFilePanel("Title", "", "sample", "txt");
         if (path is not null) {
-            File.WriteAllText(path.FullName, _data);
+            File.WriteAllText(path.PathOrUrl, _data);
         }
     }
 #endif

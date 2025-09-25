@@ -71,9 +71,10 @@ namespace USFB
             cb?.Invoke(OpenFolderPanel(title, directory, multiselect));
         }
 
-        public string SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
+        public FileReference SaveFilePanel(string title, string directory, string defaultName, ExtensionFilter[] extensions)
         {
             var finalFilename = "";
+            
             if (!string.IsNullOrEmpty(directory))
             {
                 finalFilename = GetDirectoryPath(directory);
@@ -95,13 +96,18 @@ namespace USFB
 
             var path = ShellFileDialogs.FileSaveDialog.ShowDialog(GetActiveWindow(), title, directory, finalFilename,
                 shellFilters, 0);
-            return path;
+            
+            return FileReference.FromPath(path);
         }
 
-        public void SaveFilePanelAsync(string title, string directory, string defaultName, ExtensionFilter[] extensions,
-            Action<string> cb)
+        public void SaveFilePanelAsync(
+            string title, 
+            string directory, 
+            string defaultName, 
+            ExtensionFilter[] extensions,
+            Action<FileReference> callback)
         {
-            cb?.Invoke(SaveFilePanel(title, directory, defaultName, extensions));
+            callback?.Invoke(SaveFilePanel(title, directory, defaultName, extensions));
         }
 
         static ShellFileDialogs.Filter[] GetShellFilterFromFileExtensionList(ExtensionFilter[] extensions)
